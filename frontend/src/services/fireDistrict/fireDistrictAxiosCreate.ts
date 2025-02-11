@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "/users";
+const baseUrl = "/firedistrict";
 
 export const axiosJWT = axios.create({
   baseURL: baseUrl,
@@ -35,6 +35,7 @@ axiosJWT.interceptors.response.use(
         console.log("success");
         return axiosJWT(error.config);
       } catch (refreshError) {
+        console.log(refreshError);
         console.error("Refresh token failed. Logging out...");
       }
     }

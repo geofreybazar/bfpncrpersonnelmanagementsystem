@@ -1,26 +1,45 @@
 import React from "react";
+import useGetAllFireDistricts from "../../hooks/useGetAllFireDistricts";
 import TextFieldComponent from "./TextFieldComponent";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import SelecField from "./SelecField";
+import { Control, FieldErrors, UseFormRegister } from "react-hook-form";
+import { AddPersonnelSchema } from "../../utilities/schema";
 
 interface OfficeInformationProps {
-  register: UseFormRegister<any>;
+  register: UseFormRegister<AddPersonnelSchema>;
   errors: FieldErrors;
+  control: Control<AddPersonnelSchema>;
 }
 const OfficeInformation: React.FC<OfficeInformationProps> = ({
   register,
   errors,
+  control,
 }) => {
+  const { fireDistricts, isLoadingGetFireDistricts } = useGetAllFireDistricts();
+
+  const fireDistrictsList = fireDistricts?.map((item) => item.name);
+
+  if (isLoadingGetFireDistricts) {
+    return <p>Loading</p>;
+  }
   return (
     <div>
-      <div className='w-full bg-gray-100 p-1 font-semibold'>
+      <div className="w-full bg-gray-100 p-1 font-semibold">
         Office Information
       </div>
-      <div className='grid grid-cols-4 gap-10 py-5'>
+      <div className="grid grid-cols-4 gap-10 py-5">
         <TextFieldComponent
           label={"Fire District"}
           name={"district"}
           register={register}
           errors={errors}
+        />
+        <SelecField
+          control={control}
+          label={"Rank"}
+          name="rank"
+          errors={errors}
+          items={fireDistrictsList}
         />
 
         <TextFieldComponent

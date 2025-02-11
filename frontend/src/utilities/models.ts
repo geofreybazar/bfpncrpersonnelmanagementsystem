@@ -16,7 +16,7 @@ export interface User {
   city: string;
   office: string;
   accountNumber: string;
-  role: string;
+  itAdmin: boolean;
   pictureInfo?: PictureInfo;
   token?: string;
   refreshToken?: string;
@@ -25,4 +25,9 @@ export interface User {
 export interface Credential {
   accountNumber: string;
   password: string;
+}
+
+export interface FireDistricts {
+  name: string;
+  id: string;
 }

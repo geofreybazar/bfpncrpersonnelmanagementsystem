@@ -10,4 +10,29 @@ const style = {
   p: 4,
 };
 
-export default { style };
+const rank = [
+  "FCSUPT",
+  "FSSUPT",
+  "FSUPT",
+  "FCINSP",
+  "FSINSP",
+  "FINSP",
+  "FINSP",
+  "SFO4",
+  "SFO3",
+  "SFO2",
+  "SFO1",
+  "FO3",
+  "FO2",
+  "FO1",
+];
+
+const fireDistricts = [
+  "Fire District I",
+  "Fire District II",
+  "Fire District III",
+  "Fire District IV",
+  "Fire District V",
+];
+
+export default { style, rank, fireDistricts };

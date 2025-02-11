@@ -1,43 +1,28 @@
+import { FieldErrors, UseFormRegister, Control } from "react-hook-form";
 import SelecField from "./SelecField";
 import TextFieldComponent from "./TextFieldComponent";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { AddPersonnelSchema } from "../../utilities/schema";
+import variable from "../../utilities/variables.js";
+
+const rank = variable.rank;
 
 interface GeneralinformationProps {
-  register: UseFormRegister<any>;
-  errors: FieldErrors;
-  control: any;
-  Controller: any;
+  register: UseFormRegister<AddPersonnelSchema>;
+  errors: FieldErrors<AddPersonnelSchema>;
+  control: Control<AddPersonnelSchema>;
 }
-
-const rank = [
-  "FCSUPT",
-  "FSSUPT",
-  "FSUPT",
-  "FCINSP",
-  "FSINSP",
-  "FINSP",
-  "FINSP",
-  "SFO4",
-  "SFO3",
-  "SFO2",
-  "SFO1",
-  "FO3",
-  "FO2",
-  "FO1",
-];
 
 const Generalinformation: React.FC<GeneralinformationProps> = ({
   register,
   errors,
   control,
-  Controller,
 }) => {
   return (
     <div>
-      <div className='w-full bg-gray-100 p-1 font-semibold'>
+      <div className="w-full bg-gray-100 p-1 font-semibold">
         General Information
       </div>
-      <div className='grid grid-cols-4 gap-10 py-5'>
+      <div className="grid grid-cols-4 gap-10 py-5">
         <TextFieldComponent
           label={"First Name"}
           name={"firstName"}
@@ -62,21 +47,12 @@ const Generalinformation: React.FC<GeneralinformationProps> = ({
           register={register}
           errors={errors}
         />
-
-        {/* <SelecField
-          Controller={Controller}
+        <SelecField
           control={control}
           label={"Rank"}
-          name={rank}
+          name="rank"
           errors={errors}
           items={rank}
-        /> */}
-
-        <TextFieldComponent
-          label={"Rank"}
-          name={"rank"}
-          register={register}
-          errors={errors}
         />
         <TextFieldComponent
           label={"Email address"}

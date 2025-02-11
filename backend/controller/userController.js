@@ -11,7 +11,7 @@ const addPersonnel = async (req, res, next) => {
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   let role;
-  if (body.role === true) {
+  if (body.itAdmin === true) {
     role = "admin";
   } else {
     role = "personnel";

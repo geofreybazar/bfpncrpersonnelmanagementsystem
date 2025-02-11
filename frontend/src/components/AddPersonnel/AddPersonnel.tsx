@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { addPersonnelSchema } from "../../utilities/schema.ts";
-import { User } from "../../utilities/models.ts";
+import {
+  AddPersonnelSchema,
+  addPersonnelSchema,
+} from "../../utilities/schema.ts";
 
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { FaSpinner } from "react-icons/fa";
 
 import useAddPersonnel from "../../hooks/useAddPersonnel.ts";
 import Generalinformation from "./Generalinformation.tsx";
@@ -32,7 +35,7 @@ const AddPersonnel = () => {
     control,
     setError,
     formState: { errors },
-  } = useForm<User>({
+  } = useForm<AddPersonnelSchema>({
     resolver: zodResolver(addPersonnelSchema),
   });
 
@@ -42,7 +45,7 @@ const AddPersonnel = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const onSubmit: SubmitHandler<User> = async (data) => {
+  const onSubmit: SubmitHandler<Partial<AddPersonnelSchema>> = async (data) => {
     await addPersonnel(data);
   };
 
@@ -59,41 +62,53 @@ const AddPersonnel = () => {
         message: axiosError?.response?.data?.error || "An error occurred",
       });
     }
-  }, [error, isError]);
+  }, [setError, error, isError]);
 
   return (
-    <div className='shadow-md border p-5'>
-      <div className='text-xl font-semibold'>Add Personnel</div>
+    <div className="shadow-md border p-5">
+      <div className="text-xl font-semibold">Add Personnel</div>
       <div>Bureau of Fire Protection - National Capital Region</div>
       <form
-        className='w-full py-5 flex flex-col gap-5'
+        className="w-full py-5 flex flex-col gap-5"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Generalinformation
           register={register}
           errors={errors}
           control={control}
-          Controller={Controller}
         />
-        <OfficeInformation register={register} errors={errors} />
+        <OfficeInformation
+          register={register}
+          errors={errors}
+          control={control}
+        />
 
         <FormControlLabel
-          control={<Checkbox size='small' {...register("role")} />}
-          label='IT Admin Personnel'
+          control={<Checkbox size="small" {...register("itAdmin")} />}
+          label="IT Admin Personnel"
         />
 
         {errors.root && (
-          <div className='text-center text-red-600 uppercase'>
+          <div className="text-center text-red-600 uppercase">
             {errors.root.message}{" "}
           </div>
         )}
 
         <Button
-          variant='contained'
+          variant="contained"
           disabled={isPendingAddPersonnel}
-          type='submit'
+          type="submit"
         >
-          {isPendingAddPersonnel ? "Submitting" : "Submit"}
+          <div className="flex items-center gap-2">
+            {isPendingAddPersonnel ? (
+              <>
+                <FaSpinner className="animate-spin" />
+                <p>Submitting</p>
+              </>
+            ) : (
+              <p>Submit</p>
+            )}
+          </div>
         </Button>
       </form>
 

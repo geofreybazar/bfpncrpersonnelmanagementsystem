@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-
+import { AddPersonnelSchema } from "../../utilities/schema";
 interface TextFieldComponentProps {
   label: string;
-  name: string;
-  register: UseFormRegister<any>;
+  name: keyof AddPersonnelSchema;
+  register: UseFormRegister<AddPersonnelSchema>;
   errors: FieldErrors;
 }
 
@@ -18,10 +18,10 @@ const TextFieldComponent: React.FC<TextFieldComponentProps> = ({
     <div>
       <TextField
         fullWidth
-        variant='standard'
+        variant="standard"
         label={label}
         {...register(name)}
-        size='small'
+        size="small"
         error={!!errors[name]}
         helperText={errors[name]?.message ? String(errors[name]?.message) : ""}
       />

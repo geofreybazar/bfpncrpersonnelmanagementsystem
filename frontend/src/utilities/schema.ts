@@ -15,6 +15,8 @@ export const addPersonnelSchema = z
     city: z.string().min(1, "City is required"),
     office: z.string().min(1, "Office is required"),
     accountNumber: z.string().min(1, "Account number is required"),
-    role: z.boolean(),
+    itAdmin: z.boolean(),
   })
   .required();
+
+export type AddPersonnelSchema = z.infer<typeof addPersonnelSchema>;

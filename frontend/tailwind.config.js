@@ -9,6 +9,7 @@ export default {
         pink: "#f2e9e1",
         mocha: "#676767",
         turquoise: "#64b5c6",
+        lightTurquoise: "#c1e1e8",
       },
     },
   },

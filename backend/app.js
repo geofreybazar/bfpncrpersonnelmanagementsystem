@@ -6,6 +6,8 @@ import config from "./utils/config.js";
 import connectToDB from "./utils/connectToDb.js";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.js";
+import cityFireStationRouter from "./routes/cityFireStationRouter.js";
+import fireDistrictRouter from "./routes/fireDistrictRouter.js";
 
 const MONGO_URL = config.MONGO_URL;
 const app = express();
@@ -22,6 +24,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/users", userControllerRouter);
+app.use("/cityfirestations", cityFireStationRouter);
+app.use("/firedistrict", fireDistrictRouter);
 
 app.use(errorHandler);
 

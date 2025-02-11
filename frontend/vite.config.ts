@@ -8,6 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/users": "http://localhost:3001",
+      "/firedistrict": "http://localhost:3001",
     },
   },
 });
