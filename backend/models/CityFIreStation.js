@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 const cityFireSationSchema = new mongoose.Schema({
+  fireDistrict: { type: String, required: true },
   name: { type: String, required: true, unique: true },
-  district: { type: String, required: true },
+  fireSubStations: [{ type: String }],
 });
 
 cityFireSationSchema.set("toJSON", {

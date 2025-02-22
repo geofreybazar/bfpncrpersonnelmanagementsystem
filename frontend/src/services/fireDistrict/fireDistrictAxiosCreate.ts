@@ -37,6 +37,8 @@ axiosJWT.interceptors.response.use(
       } catch (refreshError) {
         console.log(refreshError);
         console.error("Refresh token failed. Logging out...");
+        window.location.href = "/login";
+        alert("Login session expires");
       }
     }
 

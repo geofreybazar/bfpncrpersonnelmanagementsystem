@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import fireDistrictService from "../services/fireDistrict/fireDistrictService";
 
 const useGetAllFireDistricts = () => {
   const { data: fireDistricts, isLoading: isLoadingGetFireDistricts } =
-    useQuery({
+    useSuspenseQuery({
       queryKey: ["getAllFireDistricts"],
       queryFn: () => fireDistrictService.getAllFireDistrict(),
     });

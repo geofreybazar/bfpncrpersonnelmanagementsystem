@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const FireDistrictSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
+  cities: [{ type: String, unique: true }],
 });
 
 FireDistrictSchema.set("toJSON", {
@@ -15,3 +16,5 @@ FireDistrictSchema.set("toJSON", {
 const FireDistrict = mongoose.model("FireDistrict", FireDistrictSchema);
 
 export default FireDistrict;
+
+

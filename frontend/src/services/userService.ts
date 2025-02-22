@@ -9,7 +9,7 @@ const login = async (credentials: Credential) => {
 };
 
 const getAllPersonnel = async (): Promise<User[]> => {
-  const response = await axiosJWT.get("/getpersonnel");
+  const response = await axiosJWT.get("/getallpersonnel");
   return response.data;
 };
 
@@ -18,8 +18,14 @@ const addPersonnel = async (newPersonnel: Partial<User>): Promise<User[]> => {
   return response.data;
 };
 
+const getPersonnel = async (id: string | null): Promise<User> => {
+  const response = await axiosJWT.get(`/getpersonnel?id=${id}`);
+  return response.data;
+};
+
 export default {
   login,
   getAllPersonnel,
   addPersonnel,
+  getPersonnel,
 };

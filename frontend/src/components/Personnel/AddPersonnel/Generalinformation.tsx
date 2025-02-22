@@ -1,8 +1,8 @@
 import { FieldErrors, UseFormRegister, Control } from "react-hook-form";
 import SelecField from "./SelecField";
 import TextFieldComponent from "./TextFieldComponent";
-import { AddPersonnelSchema } from "../../utilities/schema";
-import variable from "../../utilities/variables.js";
+import { AddPersonnelSchema } from "../../../utilities/schema";
+import variable from "../../../utilities/variables.js";
 
 const rank = variable.rank;
 

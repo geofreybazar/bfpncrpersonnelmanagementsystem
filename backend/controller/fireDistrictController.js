@@ -1,8 +1,11 @@
 import FireDistrict from "../models/FireDistrict.js";
 
 const addFireDistrict = async (req, res, next) => {
-  console.log("asdasds");
   const name = req.body.name;
+
+  if (!name) {
+    res.status(400).json("Fire District Name is required!");
+  }
 
   const mewFireDistrict = new FireDistrict({
     name,
@@ -24,7 +27,7 @@ const getFireDistrict = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(error);
-    return res.status(400);
+    // return res.status(400);
   }
 };
 

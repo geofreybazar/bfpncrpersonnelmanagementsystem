@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAddFireDistrict from "../../../hooks/useAddFireDistrict";
 
-import { TextField } from "@mui/material";
+import { Snackbar, SnackbarCloseReason, TextField } from "@mui/material";
+import { FaSpinner } from "react-icons/fa";
+import { AxiosError } from "axios";
 
 const AddFireDistrict = () => {
   const [fireDistrictName, setFireDistrictName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
   const navigate = useNavigate();
 
   const {
@@ -14,7 +19,6 @@ const AddFireDistrict = () => {
     isSuccess,
     error,
     isError,
-    status,
   } = useAddFireDistrict();
 
   const handleBackButton = () => {
@@ -23,8 +27,48 @@ const AddFireDistrict = () => {
 
   const handleAddFireDistrict = async (e: React.FormEvent) => {
     e.preventDefault();
+
     await addFireDistrict(fireDistrictName);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setFireDistrictName("");
+      setErrorMessage("");
+      setOpenSnackBar(true);
+    }
+  }, [isSuccess]);
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackBar(false);
+  };
+
+  useEffect(() => {
+    if (isError && error) {
+      const axiosError = error as AxiosError<unknown>;
+      const errorData = axiosError.response?.data;
+
+      if (typeof errorData === "string") {
+        setErrorMessage(errorData);
+      } else if (
+        typeof errorData === "object" &&
+        errorData !== null &&
+        "error" in errorData
+      ) {
+        setErrorMessage((errorData as { error: string }).error);
+      } else {
+        setErrorMessage("An error occurred");
+      }
+    }
+  }, [isError, error]);
+
   return (
     <div>
       <button
@@ -33,27 +77,43 @@ const AddFireDistrict = () => {
       >
         Back
       </button>
+
       <div className="flex flex-col gap-6 items-center">
         <p className="text-3xl font-semibold">ADD NEW FIRE DISTRICT</p>
         <div className="flex gap-5 items-center">
           <label className="font-semibold">Fire District Name :</label>
           <TextField
             sx={{ width: "250px" }}
-            variant="outlined"
+            variant="standard"
             size="small"
             value={fireDistrictName}
             onChange={(e) => setFireDistrictName(e.target.value)}
-            // error={!!errors[name]}
-            // helperText={errors[name]?.message ? String(errors[name]?.message) : ""}
           />
         </div>
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <button
           onClick={handleAddFireDistrict}
-          className="w-1/6 bg-turquoise p-2 rounded-md text-white font-semibold hover:bg-lightTurquoise hover:text-black "
+          disabled={isPendingAddFireDistrict}
+          className="w-1/6 rounded-md font-semibold"
         >
-          SUBMIT
+          {isPendingAddFireDistrict ? (
+            <div className="flex justify-center p-2 rounded-md items-center gap-2 bg-lightTurquoise">
+              <FaSpinner className="animate-spin" />
+              <p>Submitting</p>
+            </div>
+          ) : (
+            <div className="bg-turquoise p-2 rounded-md text-white hover:bg-lightTurquoise hover:text-black">
+              SUBMIT
+            </div>
+          )}
         </button>
       </div>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message="Fire District successfully added!"
+      />
     </div>
   );
 };

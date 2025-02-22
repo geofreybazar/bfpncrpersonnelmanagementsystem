@@ -28,7 +28,6 @@ const addPersonnel = async (req, res, next) => {
     passwordHash,
     district: body.district,
     city: body.city,
-    office: body.office,
     email: body.email,
   });
 
@@ -97,14 +96,21 @@ const login = async (req, res, next) => {
 
 const generateRefreshToken = async (req, res, next) => {
   const refreshToken = req.cookies.refresh_token;
+  console.log("REFRESH");
   if (!refreshToken) {
     return res.status(401).json({ message: "Refresh token missing" });
   }
 
-  const decodedToken = jwt.verify(refreshToken, config.REFRESH_TOKEN);
-
-  if (!decodedToken) {
-    return res.status(401).json("You are not authenticated!");
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(refreshToken, config.REFRESH_TOKEN);
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(403)
+        .json({ message: "Refresh Token Expired. Please log in again." });
+    }
+    return res.status(401).json({ message: "Invalid Refresh Token" });
   }
 
   const user = await User.findById(decodedToken.id);
@@ -134,7 +140,8 @@ const generateRefreshToken = async (req, res, next) => {
 
     res.status(200).json({ message: "Token refreshed" });
   } catch (error) {
-    next(error);
+    console.log(error);
+    return res.status(403).json({ error: "Invalid refresh token" });
   }
 };
 
@@ -147,4 +154,61 @@ const getAllPersonnel = async (_, res, next) => {
   }
 };
 
-export default { addPersonnel, login, generateRefreshToken, getAllPersonnel };
+const updatePersonnel = async (req, res, next) => {
+  const body = req.body;
+
+  const userId = req.query.id;
+
+  const editedUser = {
+    rank: body.rank,
+    firstName: body.firstName,
+    middleName: body.middleName,
+    lastName: body.lastName,
+    suffix: body.suffix,
+    accountNumber: body.accountNumber,
+    role: body.role,
+    district: body.district,
+    city: body.city,
+    office: body.office,
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(userId, editedUser, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedUser) {
+    res.status(404).send({ error: "User not found!" });
+  }
+
+  try {
+    await updatedUser.save();
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json(error);
+  }
+};
+
+const getPersonnel = async (req, res, next) => {
+  const userId = req.query.id;
+  if (!userId) {
+    return res.status(404).json({ message: "No id passed!" });
+  }
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ error: "No user found!" });
+  }
+
+  return res.status(200).json(user);
+};
+
+export default {
+  addPersonnel,
+  login,
+  generateRefreshToken,
+  getAllPersonnel,
+  updatePersonnel,
+  getPersonnel,
+};

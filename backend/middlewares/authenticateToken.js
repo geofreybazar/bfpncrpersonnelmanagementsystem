@@ -3,7 +3,6 @@ import config from "../utils/config.js";
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.access_token;
-
   if (!token) {
     return res.status(401).json({ message: "Access token missing or expired" });
   }

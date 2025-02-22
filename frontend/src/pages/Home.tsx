@@ -4,13 +4,15 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { RootState } from "../store";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/SideBar/Sidebar";
-import AddPersonnel from "../components/AddPersonnel/AddPersonnel";
+import AddPersonnel from "../components/Personnel/AddPersonnel/AddPersonnel";
 import Personnel from "../components/Personnel/Personnel";
 import Dashboard from "../components/Dashboard/Dashboard";
 import AddStation from "../components/AddStation/AddStation";
 import AddFireDistrict from "../components/AddStation/AddFireDistrict/AddFireDistrict";
 import AddCityFIreStation from "../components/AddStation/AddCityFireStation/AddCityFIreStation";
 import AddFireSubStation from "../components/AddStation/AddFireSubStation/AddFireSubStation";
+import UpdatePersonnel from "../components/Personnel/UpdatePersonnel/UpdatePersonnel";
+import ViewPersonnel from "../components/Personnel/ViewPersonnel/ViewPersonnel";
 
 const Home = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -46,6 +48,14 @@ const Home = () => {
             <Route
               path="/addstation/firesubstion"
               element={<AddFireSubStation />}
+            />
+            <Route
+              path="/personnel/updatepersonnel"
+              element={<UpdatePersonnel />}
+            />
+            <Route
+              path="/personnel/viewpersonnel"
+              element={<ViewPersonnel />}
             />
             {/* <Route path='/' element={} /> */}
           </Routes>

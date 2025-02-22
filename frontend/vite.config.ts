@@ -9,6 +9,7 @@ export default defineConfig({
     proxy: {
       "/users": "http://localhost:3001",
       "/firedistrict": "http://localhost:3001",
+      "/cityfirestations": "http://localhost:3001",
     },
   },
 });

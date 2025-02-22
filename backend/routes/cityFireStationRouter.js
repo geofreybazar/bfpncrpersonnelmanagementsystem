@@ -9,5 +9,10 @@ cityFireStationRouter.post(
   authenticateToken,
   cityFireStationController.addCityFireStation
 );
+cityFireStationRouter.get(
+  "/getallcityfirestation",
+  authenticateToken,
+  cityFireStationController.getAllCityFireStations
+);
 
 export default cityFireStationRouter;

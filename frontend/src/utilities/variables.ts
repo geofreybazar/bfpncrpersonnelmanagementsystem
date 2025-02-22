@@ -27,12 +27,4 @@ const rank = [
   "FO1",
 ];
 
-const fireDistricts = [
-  "Fire District I",
-  "Fire District II",
-  "Fire District III",
-  "Fire District IV",
-  "Fire District V",
-];
-
-export default { style, rank, fireDistricts };
+export default { style, rank };

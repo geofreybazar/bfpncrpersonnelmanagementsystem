@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,15 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AddPersonnelSchema,
   addPersonnelSchema,
-} from "../../utilities/schema.ts";
+} from "../../../utilities/schema.ts";
 
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Skeleton } from "@mui/material";
 import { FaSpinner } from "react-icons/fa";
 
-import useAddPersonnel from "../../hooks/useAddPersonnel.ts";
+import useAddPersonnel from "../../../hooks/useAddPersonnel.ts";
 import Generalinformation from "./Generalinformation.tsx";
 import OfficeInformation from "./OfficeInformation.tsx";
-import ModalComponent from "../ReusableComponents/ModalComponent.tsx";
+import ModalComponent from "../../ReusableComponents/ModalComponent.tsx";
 import ConfirmSubmission from "./ConfirmSubmission.tsx";
 
 interface ErrorResponse {
@@ -77,11 +77,15 @@ const AddPersonnel = () => {
           errors={errors}
           control={control}
         />
-        <OfficeInformation
-          register={register}
-          errors={errors}
-          control={control}
-        />
+        <Suspense
+          fallback={<Skeleton variant="rectangular" width="100%" height={50} />}
+        >
+          <OfficeInformation
+            register={register}
+            errors={errors}
+            control={control}
+          />
+        </Suspense>
 
         <FormControlLabel
           control={<Checkbox size="small" {...register("itAdmin")} />}
@@ -97,7 +101,7 @@ const AddPersonnel = () => {
         <Button
           variant="contained"
           disabled={isPendingAddPersonnel}
-          type="submit"
+          onClick={handleOpen}
         >
           <div className="flex items-center gap-2">
             {isPendingAddPersonnel ? (
@@ -110,13 +114,17 @@ const AddPersonnel = () => {
             )}
           </div>
         </Button>
+
+        <ModalComponent open={openSubmission} onClose={handleClose}>
+          <ConfirmSubmission
+            onConfirm={() => {
+              handleSubmit(onSubmit)();
+            }}
+            onCancel={handleClose}
+            isPending={isPendingAddPersonnel}
+          />
+        </ModalComponent>
       </form>
-
-      <button onClick={handleOpen}>open</button>
-
-      <ModalComponent open={openSubmission} onClose={handleClose}>
-        <ConfirmSubmission />
-      </ModalComponent>
     </div>
   );
 };

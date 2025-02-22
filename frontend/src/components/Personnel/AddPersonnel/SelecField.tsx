@@ -31,7 +31,12 @@ const SelecField: React.FC<SelectFieldProps> = ({
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <Select labelId="select-labesl" label={label} {...field}>
+          <Select
+            labelId="select-labesl"
+            label={label}
+            {...field}
+            variant="standard"
+          >
             {items?.map((item, index) => (
               <MenuItem key={index} value={item}>
                 {item}

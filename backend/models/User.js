@@ -40,7 +40,6 @@ const userSchema = new mongoose.Schema({
   },
   office: {
     type: String,
-    required: true,
   },
   email: {
     type: String,

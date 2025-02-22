@@ -14,7 +14,7 @@ export interface User {
   email: string;
   district: string;
   city: string;
-  office: string;
+  office?: string;
   accountNumber: string;
   itAdmin: boolean;
   pictureInfo?: PictureInfo;
@@ -30,4 +30,13 @@ export interface Credential {
 export interface FireDistricts {
   name: string;
   id: string;
+}
+
+interface fireSubStations {
+  fireSubStationName: string;
+}
+export interface CityMunicipalFireStations {
+  name: string;
+  fireDistrict: string;
+  fireSubStations?: fireSubStations[];
 }

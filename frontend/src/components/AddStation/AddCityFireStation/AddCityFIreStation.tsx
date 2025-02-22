@@ -1,19 +1,85 @@
 import { useNavigate } from "react-router-dom";
 
+import useGetAllFireDistricts from "../../../hooks/useGetAllFireDistricts";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CityMunicipalFireStation,
+  cityMunicipalFireStation,
+} from "../../../utilities/schema";
 import {
   TextField,
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
   FormHelperText,
+  Snackbar,
+  SnackbarCloseReason,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+
+import useAddCityMunicipalFireStation from "../../../hooks/useAddCityMunicipalFireStation";
+import { FaSpinner } from "react-icons/fa";
+import { AxiosError } from "axios";
 
 const AddCityFIreStation = () => {
   const navigate = useNavigate();
+  const [openSuccesSnackbar, setOpenSuccesSnackbar] = useState(false);
+  const handleCloseSnackBar = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccesSnackbar(false);
+  };
+
+  const { fireDistricts, isLoadingGetFireDistricts } = useGetAllFireDistricts();
+  const fireDistrictsList = fireDistricts?.map((item) => item.name);
+
+  const {
+    addCityMunicipalFIreStation,
+    isPendingAddCityMunicipalFIreStation,
+    isSuccess,
+    error,
+    isError,
+  } = useAddCityMunicipalFireStation();
+  const {
+    register,
+    handleSubmit,
+    control,
+    setError,
+    formState: { errors },
+  } = useForm<CityMunicipalFireStation>({
+    resolver: zodResolver(cityMunicipalFireStation),
+  });
+
+  useEffect(() => {
+    if (isError && error) {
+      const axiosError = error as AxiosError<{ error: string }>;
+      setError("root", {
+        message: axiosError.response?.data.error || "An error occurred",
+      });
+    }
+  }, [isError, error, setError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpenSuccesSnackbar(true);
+    }
+  }, [isSuccess]);
 
   const handleBackButton = () => {
     navigate(-1);
+  };
+
+  if (isLoadingGetFireDistricts) {
+    return <p>Loading</p>;
+  }
+
+  const onSubmit = async (data: CityMunicipalFireStation) => {
+    await addCityMunicipalFIreStation(data);
   };
 
   return (
@@ -24,34 +90,77 @@ const AddCityFIreStation = () => {
       >
         Back
       </button>
-      <div className="flex flex-col gap-6 items-center">
-        <p className="text-3xl font-semibold">
-          ADD NEW CITY/MUNICIFAL FIRE STATION
-        </p>
-        <div className="flex gap-5 items-center">
-          <label className="font-semibold">Select Fire District:</label>
+      <p className=" text-center text-3xl font-semibold">
+        ADD NEW CITY/MUNICIFAL FIRE STATION
+      </p>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col items-center justify-center p-5 gap-5 w-full"
+      >
+        <div className="flex gap-2 items-center w-[500px]">
+          <label className="font-semibold w-1/2 ">Select Fire District:</label>
+          <FormControl fullWidth variant="standard" size="small">
+            <Controller
+              name="fireDistrict"
+              defaultValue=""
+              control={control}
+              render={({ field }) => (
+                <Select labelId="select-labesl" {...field}>
+                  {fireDistrictsList?.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+            <FormHelperText error={!!errors.fireDistrict}>
+              {errors.fireDistrict?.message}
+            </FormHelperText>
+          </FormControl>
+        </div>
+
+        <div className="flex items-center gap-2 w-[500px]">
+          <label className="font-semibold w-1/2">City Fire Station Name:</label>
           <TextField
-            sx={{ width: "250px" }}
-            variant="outlined"
+            fullWidth
+            variant="standard"
             size="small"
-            // error={!!errors[name]}
-            // helperText={errors[name]?.message ? String(errors[name]?.message) : ""}
+            {...register("name")}
+            error={!!errors["name"]}
+            helperText={
+              errors["name"]?.message ? String(errors["name"]?.message) : ""
+            }
           />
         </div>
-        <div className="flex gap-5 items-center">
-          <label className="font-semibold">City Fire Station Name:</label>
-          <TextField
-            sx={{ width: "250px" }}
-            variant="outlined"
-            size="small"
-            // error={!!errors[name]}
-            // helperText={errors[name]?.message ? String(errors[name]?.message) : ""}
-          />
-        </div>
-        <button className="w-1/6 bg-turquoise p-2 rounded-md text-white font-semibold hover:bg-lightTurquoise hover:text-black ">
-          SUBMIT
+
+        {errors.root && (
+          <div className="text-center text-red-600 uppercase">
+            {errors.root.message}{" "}
+          </div>
+        )}
+
+        <button type="submit" disabled={isPendingAddCityMunicipalFIreStation}>
+          {isPendingAddCityMunicipalFIreStation ? (
+            <div className="flex justify-center p-2 rounded-md items-center gap-2 bg-lightTurquoise">
+              <FaSpinner className="animate-spin" />
+              <p>Submitting</p>
+            </div>
+          ) : (
+            <div className="bg-turquoise p-2 rounded-md text-white hover:bg-lightTurquoise hover:text-black">
+              SUBMIT
+            </div>
+          )}
         </button>
-      </div>
+      </form>
+
+      <Snackbar
+        open={openSuccesSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackBar}
+        message="City Fire Station successfully added!"
+      />
     </div>
   );
 };

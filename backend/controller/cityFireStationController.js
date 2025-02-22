@@ -1,18 +1,26 @@
 import CityFireSation from "../models/CityFIreStation.js";
+import FireDistrict from "../models/FireDistrict.js";
 
 const addCityFireStation = async (req, res, next) => {
   const body = req.body;
 
   const name = body.name;
-  const district = body.district;
+  const fireDistrict = body.fireDistrict;
 
   const newCityFireStation = new CityFireSation({
+    fireDistrict,
     name,
-    district,
   });
 
   try {
     const savednewCityFireStation = await newCityFireStation.save();
+    const selectedFireDistrict = await FireDistrict.findOneAndUpdate(
+      { name: fireDistrict },
+      { $push: { cities: name } },
+      { new: true, upsert: false }
+    );
+
+    console.log(selectedFireDistrict);
     return res.status(201).json(savednewCityFireStation);
   } catch (error) {
     console.log(error);
@@ -20,6 +28,18 @@ const addCityFireStation = async (req, res, next) => {
   }
 };
 
+const getAllCityFireStations = async (req, res, next) => {
+  const cityMunicipalFireStations = await CityFireSation.find({});
+  if (!cityMunicipalFireStations) {
+    return res
+      .status(400)
+      .json({ message: "No City/ Municipal Fire Stations registered" });
+  }
+
+  return res.status(200).json(cityMunicipalFireStations);
+};
+
 export default {
   addCityFireStation,
+  getAllCityFireStations,
 };

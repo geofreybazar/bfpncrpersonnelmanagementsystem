@@ -13,10 +13,23 @@ export const addPersonnelSchema = z
       .min(1, "Email is required"),
     district: z.string().min(1, "District is required"),
     city: z.string().min(1, "City is required"),
-    office: z.string().min(1, "Office is required"),
     accountNumber: z.string().min(1, "Account number is required"),
     itAdmin: z.boolean(),
   })
   .required();
 
 export type AddPersonnelSchema = z.infer<typeof addPersonnelSchema>;
+
+export const cityMunicipalFireStation = z.object({
+  fireDistrict: z.string().min(1, "Fire District is required"),
+  name: z.string().min(1, { message: "City Fire Station name is required" }),
+  fireSubStations: z
+    .array(
+      z.object({
+        fireSubStationName: z.string(),
+      })
+    )
+    .optional(),
+});
+
+export type CityMunicipalFireStation = z.infer<typeof cityMunicipalFireStation>;

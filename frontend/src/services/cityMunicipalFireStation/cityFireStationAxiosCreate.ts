@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "/users";
+const baseUrl = "/cityfirestations";
 
 export const axiosJWT = axios.create({
   baseURL: baseUrl,
@@ -23,10 +23,7 @@ axiosJWT.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (
-      (error.response?.status === 401 || error.response?.status === 403) &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       console.log("Access token expired, attempting to refresh...");
 
       try {
@@ -38,9 +35,8 @@ axiosJWT.interceptors.response.use(
         console.log("success");
         return axiosJWT(error.config);
       } catch (refreshError) {
-        console.error("Refresh token failed. Logging out...");
         console.log(refreshError);
-        localStorage.removeItem("loggedUser");
+        console.error("Refresh token failed. Logging out...");
         window.location.href = "/login";
         alert("Login session expires");
       }
