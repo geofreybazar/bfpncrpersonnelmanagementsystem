@@ -10,6 +10,8 @@ export default defineConfig({
       "/users": "http://localhost:3001",
       "/firedistrict": "http://localhost:3001",
       "/cityfirestations": "http://localhost:3001",
+      "/firesubstation": "http://localhost:3001",
+      "/backend_office": "http://localhost:3001",
     },
   },
 });

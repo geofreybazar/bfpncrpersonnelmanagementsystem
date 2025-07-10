@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { AddPersonnelSchema } from "../../utilities/schema";
+import { AddPersonnelSchema } from "../../../utilities/schema";
 interface TextFieldComponentProps {
   label: string;
   name: keyof AddPersonnelSchema;

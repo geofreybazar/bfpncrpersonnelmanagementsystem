@@ -43,54 +43,54 @@ const Login = () => {
   };
 
   return (
-    <div className='bg-offwhite h-screen flex items-center justify-center'>
-      <div className=' w-2/5 shadow-xl border p-10'>
-        <div className='h-full flex flex-col justify-center items-center'>
-          <div className='flex flex-col items-center justify-center pb-5'>
-            <img src={logo} className='w-3/5' />.
-            <div className='text-center pb-2 font-semibold'>
-              <p className='text-xl'>
+    <div className="bg-offwhite h-screen flex items-center justify-center">
+      <div className=" w-2/5 shadow-xl border p-10">
+        <div className="h-full flex flex-col justify-center items-center">
+          <div className="flex flex-col items-center justify-center pb-5">
+            <img src={logo} className="w-3/5" />.
+            <div className="text-center pb-2 font-semibold">
+              <p className="text-xl">
                 Bureau of Fire Protection - National Capital Region
               </p>
-              <p className='text-xl'>Personnel Management Information System</p>
+              <p className="text-xl">Personnel Management Information System</p>
             </div>
             <form onSubmit={handleLogin}>
-              <div className='p-2 flex flex-col gap-2'>
+              <div className="p-2 flex flex-col gap-2">
                 <TextField
                   required
-                  id='fullWidth'
-                  size='small'
-                  autoComplete='yes'
-                  className='w-full'
-                  margin='dense'
-                  label='Account Number'
-                  variant='outlined'
+                  id="fullWidth"
+                  size="small"
+                  autoComplete="yes"
+                  className="w-full"
+                  margin="dense"
+                  label="Account Number"
+                  variant="outlined"
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
-                  placeholder='Enter Your Account Number'
-                  type='string'
+                  placeholder="Enter Your Account Number"
+                  type="string"
                 />
                 <TextField
                   required
-                  size='small'
-                  autoComplete='yes'
-                  className='w-full'
-                  margin='dense'
-                  id='filled-password-input'
-                  label='Password'
-                  variant='outlined'
+                  size="small"
+                  autoComplete="yes"
+                  className="w-full"
+                  margin="dense"
+                  id="filled-password-input"
+                  label="Password"
+                  variant="outlined"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder='Enter Your Password'
-                  type='password'
+                  placeholder="Enter Your Password"
+                  type="password"
                 />
 
                 {loginError && (
-                  <p className='text-center uppercase text-red-500'>
+                  <p className="text-center uppercase text-red-500">
                     {loginError}
                   </p>
                 )}
-                <Button type='submit' variant='contained' className='w-full'>
+                <Button type="submit" variant="contained" className="w-full">
                   Login
                 </Button>
               </div>

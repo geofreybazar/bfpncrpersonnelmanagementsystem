@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useGetAllFireDistricts from "../../../hooks/useGetAllFireDistricts";
@@ -16,7 +17,6 @@ import {
   Snackbar,
   SnackbarCloseReason,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 
 import useAddCityMunicipalFireStation from "../../../hooks/useAddCityMunicipalFireStation";
 import { FaSpinner } from "react-icons/fa";
@@ -26,7 +26,7 @@ const AddCityFIreStation = () => {
   const navigate = useNavigate();
   const [openSuccesSnackbar, setOpenSuccesSnackbar] = useState(false);
   const handleCloseSnackBar = (
-    event: React.SyntheticEvent | Event,
+    _: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {

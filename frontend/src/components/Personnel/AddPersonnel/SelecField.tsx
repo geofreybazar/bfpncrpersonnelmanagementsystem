@@ -6,7 +6,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Controller, Control, FieldErrors } from "react-hook-form";
-import { AddPersonnelSchema } from "../../utilities/schema";
+import { AddPersonnelSchema } from "../../../utilities/schema";
 
 interface SelectFieldProps {
   label: string;

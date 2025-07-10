@@ -1,15 +1,13 @@
-import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 import useGetPersonnel from "../../../hooks/useGetPersonnel";
-import { RootState } from "../../../store";
 import { Skeleton } from "@mui/material";
 
 const PersonnelDetails = () => {
-  const clickedPersonnel = useSelector(
-    (state: RootState) => state.clickedPersonnel.id
-  );
+  const params = useParams();
+  const id = params.id;
 
-  const { personnel, isLoadingPersonnel } = useGetPersonnel(clickedPersonnel);
-
+  const { personnel, isLoadingPersonnel } = useGetPersonnel(id);
+  console.log(personnel);
   if (isLoadingPersonnel) {
     return (
       <>
@@ -49,6 +47,10 @@ const PersonnelDetails = () => {
     {
       title: "Account Number",
       data: personnel.accountNumber,
+    },
+    {
+      title: "Assignment",
+      data: personnel.assignment,
     },
   ];
 

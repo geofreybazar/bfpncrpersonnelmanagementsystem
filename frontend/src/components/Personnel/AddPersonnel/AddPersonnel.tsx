@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,9 +16,10 @@ import { FaSpinner } from "react-icons/fa";
 
 import useAddPersonnel from "../../../hooks/useAddPersonnel.ts";
 import Generalinformation from "./Generalinformation.tsx";
-import OfficeInformation from "./OfficeInformation.tsx";
 import ModalComponent from "../../ReusableComponents/ModalComponent.tsx";
 import ConfirmSubmission from "./ConfirmSubmission.tsx";
+
+const OfficeInformation = lazy(() => import("./OfficeInformation.tsx"));
 
 interface ErrorResponse {
   error: string;
@@ -31,6 +32,8 @@ const AddPersonnel = () => {
 
   const {
     register,
+    watch,
+    setValue,
     handleSubmit,
     control,
     setError,
@@ -52,6 +55,7 @@ const AddPersonnel = () => {
   if (isSuccess) {
     navigate("/personnel");
     queryClient.invalidateQueries({ queryKey: ["getAllPersonnel"] });
+    queryClient.invalidateQueries({ queryKey: ["getAllPersonnelNoPage"] });
   }
 
   useEffect(() => {
@@ -81,6 +85,8 @@ const AddPersonnel = () => {
           fallback={<Skeleton variant="rectangular" width="100%" height={50} />}
         >
           <OfficeInformation
+            watch={watch}
+            setValue={setValue}
             register={register}
             errors={errors}
             control={control}
@@ -91,12 +97,6 @@ const AddPersonnel = () => {
           control={<Checkbox size="small" {...register("itAdmin")} />}
           label="IT Admin Personnel"
         />
-
-        {errors.root && (
-          <div className="text-center text-red-600 uppercase">
-            {errors.root.message}{" "}
-          </div>
-        )}
 
         <Button
           variant="contained"
@@ -117,6 +117,7 @@ const AddPersonnel = () => {
 
         <ModalComponent open={openSubmission} onClose={handleClose}>
           <ConfirmSubmission
+            errors={errors}
             onConfirm={() => {
               handleSubmit(onSubmit)();
             }}

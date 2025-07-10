@@ -16,6 +16,7 @@ const userSlice = createSlice({
     },
     logout(state) {
       state.user = null;
+      localStorage.removeItem("loggedUser");
     },
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;

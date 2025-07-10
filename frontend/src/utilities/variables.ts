@@ -3,11 +3,10 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 650,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  borderRadius: 5,
 };
 
 const rank = [
@@ -17,7 +16,6 @@ const rank = [
   "FCINSP",
   "FSINSP",
   "FINSP",
-  "FINSP",
   "SFO4",
   "SFO3",
   "SFO2",
@@ -25,6 +23,43 @@ const rank = [
   "FO3",
   "FO2",
   "FO1",
+  "NUP",
 ];
 
-export default { style, rank };
+const officerRanks = ["FCSUPT", "FSSUPT", "FSUPT", "FCINSP", "FSINSP", "FINSP"];
+
+const nonOfficerRanks = ["SFO4", "SFO3", "SFO2", "SFO1", "FO3", "FO2", "FO1"];
+
+const tableHeadStyle = [
+  { width: "14.28%" },
+  { width: "14.28%" },
+  { width: "14.28%" },
+  { width: "14.28%" },
+  { width: "14.28%" },
+  { width: "23.56%" },
+  { width: "5%" },
+];
+
+const newstyle = tableHeadStyle.map((item) => ({
+  ...item,
+  color: "white",
+}));
+
+const tableHeads: string[] = [
+  "Account Number",
+  "Rank",
+  "First Name",
+  "Middle Name",
+  "Last Name",
+  "City Station",
+  "Action",
+];
+
+export default {
+  style,
+  rank,
+  officerRanks,
+  nonOfficerRanks,
+  newstyle,
+  tableHeads,
+};

@@ -1,11 +1,11 @@
-import { axiosJWT } from "./cityFireStationAxiosCreate.ts";
-
 import { CityMunicipalFireStations } from "../../utilities/models.ts";
+import { createAxiosJWT } from "../axiosJWT.ts";
+
+const axiosJWT = createAxiosJWT("/cityfirestations");
 
 const addCityMunicipalFireStation = async (
   data: Partial<CityMunicipalFireStations>
 ): Promise<CityMunicipalFireStations> => {
-  console.log("HERE");
   console.log(data);
   const response = await axiosJWT.post("/addcityfirestation", data);
   return response.data;

@@ -27,8 +27,24 @@ const AddFireDistrict = () => {
 
   const handleAddFireDistrict = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await addFireDistrict(fireDistrictName);
+    } catch (error) {
+      const axiosError = error as AxiosError<unknown>;
+      const errorData = axiosError.response?.data;
 
-    await addFireDistrict(fireDistrictName);
+      if (typeof errorData === "string") {
+        setErrorMessage(errorData);
+      } else if (
+        typeof errorData === "object" &&
+        errorData !== null &&
+        "error" in errorData
+      ) {
+        setErrorMessage((errorData as { error: string }).error);
+      } else {
+        setErrorMessage("An error occurred");
+      }
+    }
   };
 
   useEffect(() => {
@@ -49,25 +65,6 @@ const AddFireDistrict = () => {
 
     setOpenSnackBar(false);
   };
-
-  useEffect(() => {
-    if (isError && error) {
-      const axiosError = error as AxiosError<unknown>;
-      const errorData = axiosError.response?.data;
-
-      if (typeof errorData === "string") {
-        setErrorMessage(errorData);
-      } else if (
-        typeof errorData === "object" &&
-        errorData !== null &&
-        "error" in errorData
-      ) {
-        setErrorMessage((errorData as { error: string }).error);
-      } else {
-        setErrorMessage("An error occurred");
-      }
-    }
-  }, [isError, error]);
 
   return (
     <div>

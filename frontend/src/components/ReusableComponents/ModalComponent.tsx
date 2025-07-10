@@ -19,8 +19,8 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
     <Modal
       open={open}
       onClose={onClose}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
       <Box sx={style}>{children}</Box>
     </Modal>

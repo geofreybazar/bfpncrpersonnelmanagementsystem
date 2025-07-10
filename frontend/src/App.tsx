@@ -31,8 +31,8 @@ function App() {
   }
   return (
     <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route path='/*' element={user ? <Home /> : <Navigate to='/login' />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/*" element={user ? <Home /> : <Navigate to="/login" />} />
     </Routes>
   );
 }

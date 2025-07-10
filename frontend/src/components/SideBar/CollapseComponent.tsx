@@ -16,10 +16,10 @@ const CollapseComponent: React.FC<CollapseComponentProps> = ({
   list,
 }) => {
   return (
-    <Collapse in={state} timeout='auto' unmountOnExit>
-      <div className='flex flex-col gap-2 py-2'>
+    <Collapse in={state} timeout="auto" unmountOnExit>
+      <div className="flex flex-col gap-2 py-2 pl-5">
         {list.map((item, index) => (
-          <NavLink key={index} className='flex flex-col' to={item.url}>
+          <NavLink key={index} className="flex flex-col" to={item.url}>
             {item.link}
           </NavLink>
         ))}

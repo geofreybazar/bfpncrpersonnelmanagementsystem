@@ -1,90 +1,42 @@
-import { useDispatch } from "react-redux";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clickedPersonnelActions } from "../../store/clickedPersonnelSlice";
-import useGetAllPersonnel from "../../hooks/useGetAllPersonnel";
-
-import EditIcon from "@mui/icons-material/Edit";
-import { Skeleton } from "@mui/material/";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  // TablePagination,
-  TableRow,
-} from "@mui/material/";
-
-type TableHead = string[];
-
-const tableHeadStyle = {
-  color: "white",
-  width: "14.28%",
-};
-
-const tableHeads: TableHead = [
-  "Account Number",
-  "Rank",
-  "First Name",
-  "Middle Name",
-  "Last Name",
-  "City Station",
-  "Action",
-];
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import Filter from "./Filter/Filter";
+import DefaultTable from "./Table/DefaultTable";
+import FilteredTable from "./Table/FilteredTable";
 
 const TablePersonnel = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { allPersonnel, isLoadingGetAllPersonnel } = useGetAllPersonnel();
-  console.log(allPersonnel);
-  if (isLoadingGetAllPersonnel) {
-    return (
-      <>
-        <Skeleton variant="rectangular" width="100%" height={50} />
-      </>
-    );
-  }
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleViewPersonnelDetails = (id: string) => {
-    dispatch(clickedPersonnelActions.setClickedPersonnel(id));
-    navigate("/personnel/viewpersonnel");
-  };
+  const navigate = useNavigate();
+  const filteredPersonnel = useSelector(
+    (state: RootState) => state.personnel.personnel
+  );
+
+  const handleViewPersonnelDetails = useCallback(
+    (id: string) => {
+      navigate(`/personnel/${id}`);
+    },
+    [navigate]
+  );
 
   return (
     <div>
-      <TableContainer>
-        <Table size="small">
-          <TableHead className="bg-turquoise">
-            <TableRow>
-              {tableHeads.map((head, index) => (
-                <TableCell key={index} style={tableHeadStyle}>
-                  {head}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {allPersonnel?.map((data, index) => (
-              <TableRow key={index}>
-                <TableCell>{data.accountNumber}</TableCell>
-                <TableCell>{data.rank}</TableCell>
-                <TableCell>{data.firstName}</TableCell>
-                <TableCell>{data.middleName}</TableCell>
-                <TableCell>{data.lastName}</TableCell>
-                <TableCell>{data.city}</TableCell>
-                <TableCell>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => handleViewPersonnelDetails(data.id)}
-                  >
-                    <EditIcon />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Filter page={page} rowsPerPage={rowsPerPage} />
+      {filteredPersonnel ? (
+        <FilteredTable
+          filteredPersonnel={filteredPersonnel}
+          handleViewPersonnelDetails={handleViewPersonnelDetails}
+          page={page}
+          setPage={setPage}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
+        />
+      ) : (
+        <DefaultTable handleViewPersonnelDetails={handleViewPersonnelDetails} />
+      )}
     </div>
   );
 };
